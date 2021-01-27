@@ -24,14 +24,14 @@ const parseArguments = (args: Array<string>): CalculateExercisesValues => {
       throw new Error("All arguments should be of type Number");
     }
   }
-  const [value1, value2, target, ...exercises] = args;
+  const [, , target, ...exercises] = args;
   return {
     target: Number(target),
     exercises: exercises.map((ex) => Number(ex)),
   };
 };
 
-const calculateExercises = (
+export const calculateExercises = (
   target: number,
   exercises: Array<number>
 ): CalculateExercisesResult => {
@@ -58,9 +58,9 @@ const calculateExercises = (
   };
 };
 
-try {
+/*try {
   const { target, exercises } = parseArguments(process.argv);
   console.log(calculateExercises(target, exercises));
 } catch (e) {
   console.log("Error has occured. Error message: " + e.message);
-}
+}*/
