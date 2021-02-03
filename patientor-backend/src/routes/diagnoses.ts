@@ -3,7 +3,7 @@ import { getDiagnoses } from "../services/diagnoseService";
 const router = express.Router();
 
 router.get("/", (_req, res) => {
-  res.send(getDiagnoses());
+  res.status(400).send(getDiagnoses());
 });
 
 export default router;
