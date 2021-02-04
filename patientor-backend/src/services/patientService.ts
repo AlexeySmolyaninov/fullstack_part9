@@ -1,8 +1,8 @@
 import { v4 as uuid } from "uuid";
 import patients from "../../data/patients";
-import { NewPatient, NonSensetivePatient, Patient } from "../types";
+import { NewPatient, PublicPatient, Patient } from "../types";
 
-const getPatients = (): NonSensetivePatient[] => {
+const getPatients = (): PublicPatient[] => {
   return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
@@ -19,4 +19,12 @@ const addPatient = (patient: NewPatient): Patient => {
   return newPatient;
 };
 
-export { getPatients, addPatient };
+const getPatient = (id: string): Patient => {
+  const patient = patients.find((obj) => obj.id === id);
+  if (!patient) {
+    throw new Error(`Can't find patient by id ${id}`);
+  }
+  return patient;
+};
+
+export { getPatients, addPatient, getPatient };

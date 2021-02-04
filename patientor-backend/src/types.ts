@@ -11,6 +11,7 @@ export type Patient = {
   ssn: string;
   gender: Gender;
   occupation: string;
+  entries: Entry[];
 };
 
 export enum Gender {
@@ -18,6 +19,9 @@ export enum Gender {
   female = "female",
 }
 
-export type NonSensetivePatient = Omit<Patient, "ssn">;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Entry {}
+
+export type PublicPatient = Omit<Patient, "ssn" | "entries">;
 
 export type NewPatient = Omit<Patient, "id">;

@@ -13,6 +13,7 @@ const parseReqDataToNewPatientType = (obj: any): NewPatient => {
     gender: parseGender(obj.gender),
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     occupation: parseOccupation(obj.occupation),
+    entries: [],
   };
 };
 
