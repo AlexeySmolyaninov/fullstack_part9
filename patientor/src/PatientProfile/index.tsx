@@ -1,26 +1,39 @@
-import Axios from "axios";
+import axios from "axios";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Divider, Header, Icon, List, Segment } from "semantic-ui-react";
 import { apiBaseUrl } from "../constants";
-import { setPatient, useStateValue } from "../state";
-import { Gender, Patient } from "../types";
+import { setDiagnoses, setPatient, useStateValue } from "../state";
+import { Diagnose, Gender, Patient } from "../types";
 
 const PatientProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patient }, dispatch] = useStateValue();
+  const [{ patient, diagnoses }, dispatch] = useStateValue();
   useEffect(() => {
     const fetchPatient = async () => {
-      const { data: patientFromApi } = await Axios.get<Patient>(
+      const { data: patientFromApi } = await axios.get<Patient>(
         `${apiBaseUrl}/patients/${id}`
       );
       dispatch(setPatient(patientFromApi));
     };
+
+    const fetchDiagnoses = async () => {
+      const { data: diagnosesFromApi } = await axios.get<Array<Diagnose>>(
+        `${apiBaseUrl}/diagnoses`
+      );
+      dispatch(setDiagnoses(diagnosesFromApi));
+    };
+
     if (!patient || patient.id !== id) {
       fetchPatient();
     }
+
+    if (diagnoses.length === 0) {
+      fetchDiagnoses();
+    }
   }, [dispatch]);
 
+  console.log("diagnoses _> ", diagnoses);
   if (patient) {
     return (
       <div>
@@ -47,9 +60,21 @@ const PatientProfile: React.FC = () => {
                 <p>{entry.description}</p>
                 <List bulleted>
                   {entry.diagnosisCodes &&
-                    entry.diagnosisCodes.map((code) => (
-                      <List.Item key={code}>{code}</List.Item>
-                    ))}
+                    entry.diagnosisCodes.map((code) => {
+                      const diagnose = diagnoses.find(
+                        (obj) => obj.code === code
+                      );
+                      if (diagnose) {
+                        return (
+                          <List.Item key={code}>
+                            {diagnose.code} {diagnose.name}
+                          </List.Item>
+                        );
+                      }
+                      return (
+                        <List.Item key={code}>{code} !! UNKNOW CODE</List.Item>
+                      );
+                    })}
                 </List>
               </Segment>
             );
