@@ -31,12 +31,12 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnose["code"]>;
 }
 
-interface HealthCheckEntry extends BaseEntry {
+export interface HealthCheckEntry extends BaseEntry {
   type: "HealthCheck";
   healthCheckRating: HealthCheckRating;
 }
 
-interface HospitalEntry extends BaseEntry {
+export interface HospitalEntry extends BaseEntry {
   type: "Hospital";
   discharge: {
     date: string;
@@ -44,7 +44,7 @@ interface HospitalEntry extends BaseEntry {
   };
 }
 
-interface OccupationalHealhcareEntry extends BaseEntry {
+export interface OccupationalHealhcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   employerName: string;
   sickLeave?: {

@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Divider, Header, Icon, List, Segment } from "semantic-ui-react";
+import { Divider, Header, Icon, Segment } from "semantic-ui-react";
+import PatientEntry from "../components/PatientEntry/";
 import { apiBaseUrl } from "../constants";
 import { setDiagnoses, setPatient, useStateValue } from "../state";
 import { Diagnose, Gender, Patient } from "../types";
@@ -53,32 +54,9 @@ const PatientProfile: React.FC = () => {
 
           <Divider horizontal>Entries</Divider>
           {patient.entries.length === 0 && <Header>No entries</Header>}
-          {patient.entries.map((entry) => {
-            return (
-              <Segment key={entry.id}>
-                <Header>{entry.date}</Header>
-                <p>{entry.description}</p>
-                <List bulleted>
-                  {entry.diagnosisCodes &&
-                    entry.diagnosisCodes.map((code) => {
-                      const diagnose = diagnoses.find(
-                        (obj) => obj.code === code
-                      );
-                      if (diagnose) {
-                        return (
-                          <List.Item key={code}>
-                            {diagnose.code} {diagnose.name}
-                          </List.Item>
-                        );
-                      }
-                      return (
-                        <List.Item key={code}>{code} !! UNKNOW CODE</List.Item>
-                      );
-                    })}
-                </List>
-              </Segment>
-            );
-          })}
+          {patient.entries.map((entry) => (
+            <PatientEntry key={entry.id} entry={entry} />
+          ))}
         </Segment>
       </div>
     );
