@@ -1,4 +1,5 @@
-import { Gender, NewPatient } from "./types";
+import { Gender, NewPatient } from "../types";
+import { isDate, isGender, isString } from "./dataTypesCheck";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const parseReqDataToNewPatientType = (obj: any): NewPatient => {
@@ -55,25 +56,6 @@ const parseOccupation = (occupation: any) => {
   }
 
   return occupation;
-};
-
-const isGender = (gender: any): gender is Gender => {
-  return Object.values(Gender).includes(gender);
-};
-
-/* since we have a strange data this method should be excluded */
-/*
-const isSsnLightValidation = (ssn: string): boolean => {
-  return ssn.length === 11 && Number(ssn.slice(0, 6)) >= 0;
-};
-*/
-
-const isDate = (date: string): boolean => {
-  return Boolean(Date.parse(date));
-};
-
-const isString = (value: any): value is string => {
-  return typeof value === "string" || value instanceof String;
 };
 
 export default parseReqDataToNewPatientType;

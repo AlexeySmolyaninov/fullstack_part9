@@ -1,10 +1,12 @@
 import express from "express";
 import {
+  addEntry,
   addPatient,
   getPatient,
   getPatients,
 } from "../services/patientService";
-import parseReqDataToNewPatientType from "../utils";
+import parseReqDataToNewPatientType from "../utils/parseReqDataToNewPatientType";
+import parseReqDataToNewPatientEntry from "../utils/parseReqDataToNewPatientEntry";
 const router = express.Router();
 
 router.get("/", (_req, res) => {
@@ -25,15 +27,26 @@ router.post("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
   const { id } = req.params;
-  if (!id || typeof id !== "string") {
-    res.status(400).send({ error: "ID should of type Strig" });
-  }
   try {
     const patient = getPatient(id);
     res.send(patient);
   } catch (e) {
     if (e instanceof Error) {
       res.status(400).send({ error: e.message });
+    }
+  }
+});
+
+router.post("/:id/entries", (req, res) => {
+  const { id } = req.params;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const newEntry = parseReqDataToNewPatientEntry(req.body);
+  try {
+    const persistedEntry = addEntry(id, newEntry);
+    res.send(persistedEntry);
+  } catch (e) {
+    if (e instanceof Error) {
+      res.send({ error: e.message });
     }
   }
 });
