@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Divider, Header, Icon, Segment } from "semantic-ui-react";
+import { Button, Divider, Header, Icon, Segment } from "semantic-ui-react";
+import AddPatientEntryModal from "../AddPatientEntryModal";
 import PatientEntry from "../components/PatientEntry/";
 import { apiBaseUrl } from "../constants";
 import { setDiagnoses, setPatient, useStateValue } from "../state";
@@ -10,6 +11,9 @@ import { Diagnose, Gender, Patient } from "../types";
 const PatientProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [{ patient, diagnoses }, dispatch] = useStateValue();
+  const [openAddEntryModel, setOpenAddEntryModel] = React.useState<boolean>(
+    false
+  );
   useEffect(() => {
     const fetchPatient = async () => {
       const { data: patientFromApi } = await axios.get<Patient>(
@@ -34,7 +38,14 @@ const PatientProfile: React.FC = () => {
     }
   }, [dispatch]);
 
-  console.log("diagnoses _> ", diagnoses);
+  const onAddEntry = () => {
+    setOpenAddEntryModel(true);
+  };
+
+  const onCloseModal = () => {
+    setOpenAddEntryModel(false);
+  };
+
   if (patient) {
     return (
       <div>
@@ -53,11 +64,19 @@ const PatientProfile: React.FC = () => {
           <p>occupation {patient.occupation}</p>
 
           <Divider horizontal>Entries</Divider>
+          <Button color="green" onClick={onAddEntry}>
+            Add Entry
+          </Button>
           {patient.entries.length === 0 && <Header>No entries</Header>}
           {patient.entries.map((entry) => (
             <PatientEntry key={entry.id} entry={entry} />
           ))}
         </Segment>
+
+        <AddPatientEntryModal
+          openModal={openAddEntryModel}
+          onCloseModal={onCloseModal}
+        />
       </div>
     );
   }
